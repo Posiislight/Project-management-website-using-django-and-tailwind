@@ -1,0 +1,32 @@
+    {% extends "index.html "%}
+    {% block title%}Project details {% endblock %}
+    {% block content %}
+    <div class="flex justify-end mb-4">
+        <button class="bg-blue-600 text-white rounded-xl h-10 px-4 py-2 hover:bg-blue-500 transition"
+        onclick="window.location.href='{% url 'add_task' project_id=project.id %}'">
+        + ADD TASKS TO PROJECT
+    </button>
+    
+    </div>
+    <div class="flex">
+        <h1 class=" font-bold mb-3 bg-blue-200 p-3 rounded-lg mr-4">{{ project.project_name }}</h1>
+        <h2 class="font-bold mb-3 bg-gray-500 p-3 rounded-lg">Project id : {{ project.id }} </h2>
+    </div>
+    <ul class="grid grid-cols-3 gap-2">
+        
+        {% for task in task_data %}
+        <li class="p-5 bg-white shadow-lg rounded-xl hover:shadow-xl transition">
+            <div class="font-semibold flex">Task-name: <div class="ml-4 text-gray-600">{{ task.task_name }}</div> </div>
+            
+            <div class="font-semibold flex">Task-description: <div class="text-gray-600 ml-4">{{ task.task_description }}</div></div>
+            <div class="flex space-x-4">
+            <button class="bg-blue-500 p-1.5 rounded-xl mt-2 shadow-xl hover:bg-blue-300" onclick="window.location.href='{% url 'edit_task' task.id project.id %}'">EDIT TASK</button>
+            <button class="bg-red-500 p-1.5 rounded-xl mt-2 shadow-xl hover:bg-red-300"  onclick="window.location.href='{% url 'delete_task' task.id project.id %}'">DELETE TASK</button>
+            </div>
+        </li>
+        {% endfor %}
+        
+    </ul>
+        
+        
+    {% endblock%}

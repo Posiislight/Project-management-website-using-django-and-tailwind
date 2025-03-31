@@ -1,0 +1,17 @@
+{% extends 'index.html' %}
+{% block title %}edit_project{% endblock %}
+{% block content %}
+
+        <form method="post" class="mt-10 w-1/2 mx-auto p-5 border-2 rounded-xl hover:shadow-lg">
+            <h2 class="font-semibold text-center pb-4">Edit Project</h2>
+            {% csrf_token %}
+            {% for field in form%}
+                <div class="font-semibold mb-3">{{ field.label }}</div>
+                <input name="{{field.name}}" 
+                value="{{field.value|default_if_none:''}}" 
+                class="border mb-4 w-full h-10 rounded-lg">
+            {% endfor %}
+            <br>
+            <button type="submit" class="w-full mx-auto bg-blue-500 rounded-xl h-10 hover:text-white hover:bg-blue-200 hover:border-2 ">SUBMIT</button>
+        </form>
+{% endblock %}

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6 md:p-10">
+    
+    <input type="checkbox" id="sidebarToggle" class="peer hidden">
+    <label for="sidebarToggle" class="m-4 p-2 bg-blue-600 text-white rounded-lg cursor-pointer hover:bg-blue-500 transition">
+        Open Sidebar
+    </label>
+
+    <div class="fixed top-0 left-0 h-full w-64 bg-gray-900 text-white p-6 -translate-x-full peer-checked:translate-x-0 transition-transform">
+        <h2 class="text-2xl font-semibold">Sidebar</h2>
+        <ul class="mt-4 space-y-3">
+            <li><a href="{% url 'home' %}" class="hover:text-blue-400 transition">Home</a></li>
+            <li><a href="{% url 'logout' %}" class="hover:text-blue-400 transition">Logout</a></li>
+        </ul>
+        <label for="sidebarToggle" class="mt-6 block p-2 bg-red-500 text-white rounded-lg cursor-pointer hover:bg-red-600 transition">
+            Close Sidebar
+        </label>
+    </div>
+    {% block content %}
+    <div class="text-2xl font-bold text-center mt-6">Welcome, {{ user.username }}!</div>
+
+    
+    <div class="container mx-auto mt-6 px-4">
+        <div class="bg-white p-6 rounded-xl shadow-lg max-w-2xl mx-auto hover:shadow-xl transition">
+            <h2 class="text-2xl font-semibold text-gray-800 text-center">Project Overview</h2>
+            <div class="flex flex-col md:flex-row justify-center items-center md:space-x-4 mt-4">
+                <div class="text-lg font-medium text-gray-600">Total Projects:</div> 
+                <div class="text-lg font-bold text-blue-600">{{ total_projects }}</div>
+            </div>
+            <div class="text-lg font-medium text-gray-600 text-center mt-2">
+                Total Completed Tasks Across All Projects: <span class="font-bold">{{ total_completed_tasks }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-10 container mx-auto px-4">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+            <h2 class="text-2xl font-bold">Projects</h2>
+            <a href="{% url 'add_project' %}" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-500 transition shadow-md">
+                + ADD PROJECT
+            </a>
+        </div>
+
+        <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+            {% for project in project_data %}
+                <li class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition">
+                    <div class="mb-4">
+                        <h3 class="text-xl font-semibold text-gray-800">{{ project.name }}</h3>
+                        <p class="text-gray-600 font-medium">Project ID: {{ project.id }}</p>
+                        <p class="text-gray-600">Progress: <span class="font-semibold">{{ project.progress }}%</span></p>
+                        <p class="text-gray-600">Completed Tasks: <span class="font-semibold">{{ project.completed_tasks }}</span></p>
+                        <p class="text-gray-600">Total Tasks: <span class="font-semibold">{{ project.total_tasks }}</span></p>
+                    </div>
+
+                    <div class="flex flex-wrap justify-between gap-2">
+                        <a href="{% url 'edit_project' project_id=project.id %}" 
+                           class="bg-green-500 text-white py-2 px-4 rounded-lg text-center shadow-md hover:bg-green-600 transition w-full sm:w-auto">
+                            Edit
+                        </a>
+
+                        <a href="{% url 'delete_project' project_id=project.id %}" 
+                           class="bg-red-500 text-white py-2 px-4 rounded-lg text-center shadow-md hover:bg-red-600 transition w-full sm:w-auto">
+                            Delete
+                        </a>
+
+                        <a href="{% url 'project_details' project_id=project.id %}" 
+                           class="bg-gray-500 text-white py-2 px-4 rounded-lg text-center shadow-md hover:bg-gray-600 transition w-full sm:w-auto">
+                            Details
+                        </a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endblock %}
+</body>
+</html>
