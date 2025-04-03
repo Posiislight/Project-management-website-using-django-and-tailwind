@@ -1,0 +1,14 @@
+{% extends 'index.html'%}
+{% block title %}Profile Settings {% endblock %}
+
+{% block content %}
+    <form enctype="multipart/form-data" method="post" class="w-1/2 p-10 mx-auto bg-gray-100 shadow-lg hover:shadow-xl">
+        <h2 class="text-2xl font-extrabold mb-2">Profile Settings</h2>
+        {% csrf_token %}
+        {% for field in form%}
+            <label class="font-semibold">{{ field.label }}</label>
+            <input type="{{ field.field.widget.input_type }}"name="{{ field.name }}"value="{{ field.value|default_if_none:'' }}" class="w-full h-10 rounded-lg mb-3 border-2">
+        {% endfor %} 
+        <button type="submit" class="bg-blue-500 w-1/2 rounded-lg mt-5 text-center mx-auto block py-1">SUBMIT</button>
+    </form>
+{% endblock %}

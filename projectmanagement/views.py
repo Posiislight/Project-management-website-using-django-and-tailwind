@@ -1,10 +1,11 @@
 from django.shortcuts import render,redirect,get_object_or_404
-from .forms import TaskForm,RegisterForm,LoginForm,ProjectForm
+from .forms import TaskForm,RegisterForm,LoginForm,ProjectForm,ProfileForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login,authenticate
-from .models import Task,Project
+from .models import Task,Project,Profile
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import MultipleObjectsReturned
+from django.utils.timezone import now
 # Create your views here.
 
 def register(request):
@@ -42,7 +43,6 @@ def base(request):
 def home(request):
     user = request.user
     projects = Project.objects.filter(owner=request.user)
-
     total_projects = projects.count()
     total_completed_tasks = sum(project.completed_tasks for project in projects)
     project_data = []
@@ -59,7 +59,8 @@ def home(request):
         'user':user,
         'total_projects':total_projects,
         'total_completed_tasks':total_completed_tasks,
-        'project_data':project_data
+        'project_data':project_data,
+        
     }
     return render(request,'index.html',context)
 @login_required
@@ -114,7 +115,6 @@ def edit_task(request,task_id):
         project = task.project
         if form.is_valid():
             form.save()
-        # Pass project_id as a keyword argument
         return redirect('project_details', project_id=project.id)
     return render(request,'edit_task.html',{'form':form,'task':task})
 @login_required
@@ -123,11 +123,20 @@ def project_details(request,project_id):
     
     tasks= Task.objects.filter(project=project,owner=request.user)
     task_data = []
+    task = tasks.first()
     for task in tasks:
+        past_due_date = task.due_date and now() > task.due_date
+        task.save()
+        if task.past_due_date != T:
+            task.past_due_date = 'Yes'
+        elif task.past_due_date == False:
+            task.past_due_date = 'No'
         task_data.append({
             'id' : task.id,
             'task_name':task.task_name,
-            'task_description':task.task_description
+            'task_description':task.task_description,
+            'due_date':task.due_date,
+            'past_due_date':task.past_due_date
         })
 
     context = {
@@ -145,7 +154,7 @@ def edit_task(request,task_id,project_id):
         project = task.project
         if form.is_valid():
             form.save()
-# Pass only project_id as required by the project_details URL
+
         return redirect('project_details', project_id=project.id)
     return render(request,'edit_task.html',{'form':form,'task':task})
 
@@ -156,8 +165,22 @@ def delete_task(request,task_id,project_id):
         task.delete()
         return redirect('project_details',project_id = project.id)
     return render(request,'delete_task.html',{'task':task})
-
+@login_required
 def logout_user(request):
     if request.method == 'POST':
         logout_user(request,user)
     return redirect('base')
+
+@login_required
+def profile(request,user_id):
+    user = get_object_or_404(User,id=user_id)
+    profile, created = Profile.objects.get_or_create(owner=user)
+    if request.method == 'POST':
+        form = ProfileForm(request.POST,request.FILES,instance=profile)
+        if form.is_valid():
+            form.save()
+        return redirect('home')
+    else:
+        form = ProfileForm(instance=profile)
+    return render(request,'profile_settings.html',{'form':form,'user':user})
+
