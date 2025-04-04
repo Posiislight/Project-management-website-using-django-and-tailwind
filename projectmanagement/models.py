@@ -41,6 +41,9 @@ class Task(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     due_date = models.DateTimeField(default=timezone.now)
     past_due_date = models.BooleanField(default=False,choices=choice_field)
+    assigned_by = models.ForeignKey(User,related_name='assigned_by',on_delete=models.SET_NULL,null=True,blank=True)
+    assigned_to = models.ForeignKey(User,related_name='assigned_to',on_delete=models.SET_NULL,null=True,blank=True)
+
     def __str__(self):
         return self.task_name
 
@@ -69,3 +72,4 @@ def update_task_counts_delete(sender,instance,**kwargs):
 def createprofile(sender,instance,created,**kwargs):
     if created:
         Profile.object.create(owner=instance)
+

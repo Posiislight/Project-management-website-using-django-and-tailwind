@@ -18,13 +18,19 @@ class ProjectForm(forms.ModelForm):
         fields= ['project_name','project_description']
 
 class TaskForm(forms.ModelForm):
+    def __init__(self,*args,**kwargs):
+        super(TaskForm,self).__init__(*args,**kwargs)
+        user_choices = [(user.id,user.username) for user in User.objects.all()]
+        self.fields['assigned_to'].choices = user_choices
     class Meta:
         model=Task
-        fields= ['task_name','task_description','completed','due_date']
+        fields= ['task_name','task_description','completed','due_date','assigned_to']
         widgets = {
             'completed':forms.RadioSelect(),
-            'due_date':forms.DateTimeInput({'type':'datetime-local'})
+            'due_date':forms.DateTimeInput({'type':'datetime-local'}),
+            'assigned_to':forms.Select(),
         }
+        
 
 class ProfileForm(forms.ModelForm):
     first_name = forms.CharField(max_length=100)

@@ -39,6 +39,7 @@ def login_user(request):
 
 def base(request):
     return render(request,'base.html')
+
 @login_required
 def home(request):
     user = request.user
@@ -63,6 +64,7 @@ def home(request):
         
     }
     return render(request,'index.html',context)
+
 @login_required
 def add_project(request):
     form = ProjectForm()
@@ -74,6 +76,7 @@ def add_project(request):
             project.save()
             return redirect('home')
     return render(request,'add_project.html',{'form':form})
+
 @login_required
 def edit_project(request,project_id):
     project = get_object_or_404(Project,id=project_id)
@@ -106,6 +109,7 @@ def add_task(request,project_id):
             task.save()
             return redirect('project_details',project_id=project.id)
     return render(request,'add_task.html',{'form':form,'project':project})
+
 @login_required
 def edit_task(request,task_id):
     task = get_object_or_404(Task,id=task_id)
@@ -117,6 +121,7 @@ def edit_task(request,task_id):
             form.save()
         return redirect('project_details', project_id=project.id)
     return render(request,'edit_task.html',{'form':form,'task':task})
+
 @login_required
 def project_details(request,project_id):
     project = get_object_or_404(Project,id=project_id)
@@ -127,7 +132,7 @@ def project_details(request,project_id):
     for task in tasks:
         past_due_date = task.due_date and now() > task.due_date
         task.save()
-        if task.past_due_date != T:
+        if task.past_due_date == True:
             task.past_due_date = 'Yes'
         elif task.past_due_date == False:
             task.past_due_date = 'No'
@@ -136,7 +141,8 @@ def project_details(request,project_id):
             'task_name':task.task_name,
             'task_description':task.task_description,
             'due_date':task.due_date,
-            'past_due_date':task.past_due_date
+            'past_due_date':task.past_due_date,
+            'assigned_to':task.assigned_to
         })
 
     context = {
@@ -154,7 +160,6 @@ def edit_task(request,task_id,project_id):
         project = task.project
         if form.is_valid():
             form.save()
-
         return redirect('project_details', project_id=project.id)
     return render(request,'edit_task.html',{'form':form,'task':task})
 
@@ -165,6 +170,7 @@ def delete_task(request,task_id,project_id):
         task.delete()
         return redirect('project_details',project_id = project.id)
     return render(request,'delete_task.html',{'task':task})
+
 @login_required
 def logout_user(request):
     if request.method == 'POST':
@@ -184,3 +190,6 @@ def profile(request,user_id):
         form = ProfileForm(instance=profile)
     return render(request,'profile_settings.html',{'form':form,'user':user})
 
+def assigned_tasks(request):
+    assigned_tasks = Task.objects.filter(assigned_to=request.user)
+    return render(request,'assigned_tasks.html',{'assigned_tasks':assigned_tasks})

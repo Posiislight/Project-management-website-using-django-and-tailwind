@@ -14,8 +14,12 @@
     </label>
     <div class="flex justify-end">
     <a href="{% url 'profile' user_id=user.id %}" >
+        {% if user.profile.profile_image %}
         <img src="{{ user.profile.profile_image.url }}" 
         alt="" class="w-12 h-12 rounded-full">
+        {% else %}
+        <img src="/static/images/default-profile.png" alt="Default Profile" class="w-12 h-12 rounded-full">
+        {% endif %}
     </a>
     </div>
     
@@ -23,7 +27,9 @@
         <h2 class="text-2xl font-semibold">Sidebar</h2>
         <ul class="mt-4 space-y-3">
             <li><a href="{% url 'home' %}" class="hover:text-blue-400 transition">Home</a></li>
+            <li><a href="{% url 'assigned_tasks' %}" class="hover:text-blue-400 transition">Assigned Tasks</a></li>
             <li><a href="{% url 'logout' %}" class="hover:text-blue-400 transition">Logout</a></li>
+
         </ul>
         <label for="sidebarToggle" class="mt-6 block p-2 bg-red-500 text-white rounded-lg cursor-pointer hover:bg-red-600 transition">
             Close Sidebar
