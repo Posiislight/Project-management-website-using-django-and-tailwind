@@ -6,6 +6,7 @@ from .models import Task,Project,Profile
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import MultipleObjectsReturned
 from django.utils.timezone import now
+from django.contrib import messages
 # Create your views here.
 
 def register(request):
@@ -30,9 +31,11 @@ def login_user(request):
             user = authenticate(request,username=username,password=password)
             if user is not None:
                 login(request,user)
+                messages.success(request,'Login successful')
                 return redirect('home')
+                
             else:
-                form.add_error(None,"Invalid username or password")
+                messages.error(request,'Login Failed')
     else:
         form = LoginForm()
     return render(request,'login.html',{'form':form})
@@ -88,7 +91,7 @@ def edit_project(request,project_id):
     else:
         form = ProjectForm(instance=project)
     return render(request,'edit_project.html',{'form':form, 'project':project})
-
+@login_required
 def delete_project(request,project_id):
     project = get_object_or_404(Project,id=project_id)
     if request.method == 'POST':
@@ -107,20 +110,11 @@ def add_task(request,project_id):
             task.project = project
             task.owner = request.user
             task.save()
+            messages.success(request,"Task successfully created.")
             return redirect('project_details',project_id=project.id)
+        else:
+            messages.error(request,"Task creation failed")
     return render(request,'add_task.html',{'form':form,'project':project})
-
-@login_required
-def edit_task(request,task_id):
-    task = get_object_or_404(Task,id=task_id)
-    form = TaskForm(instance=task)
-    if request.method == 'POST':
-        form = TaskForm(request.POST,instance=task)
-        project = task.project
-        if form.is_valid():
-            form.save()
-        return redirect('project_details', project_id=project.id)
-    return render(request,'edit_task.html',{'form':form,'task':task})
 
 @login_required
 def project_details(request,project_id):
@@ -151,7 +145,7 @@ def project_details(request,project_id):
         'task_data':task_data,
     }
     return render(request,'project_details.html',context)
-
+@login_required
 def edit_task(request,task_id,project_id):
     task = get_object_or_404(Task,id=task_id)
     form = TaskForm(instance=task)
@@ -160,6 +154,7 @@ def edit_task(request,task_id,project_id):
         project = task.project
         if form.is_valid():
             form.save()
+            messages.success(request,"Task edited")
         return redirect('project_details', project_id=project.id)
     return render(request,'edit_task.html',{'form':form,'task':task})
 
@@ -168,12 +163,14 @@ def delete_task(request,task_id,project_id):
     project = task.project
     if request.method == 'POST':
         task.delete()
+        messages.success(request,"task deleted successfully")
         return redirect('project_details',project_id = project.id)
     return render(request,'delete_task.html',{'task':task})
 
 @login_required
 def logout_user(request):
     if request.method == 'POST':
+        messages.success(request,"Logged out successfully")
         logout_user(request,user)
     return redirect('base')
 
@@ -185,11 +182,14 @@ def profile(request,user_id):
         form = ProfileForm(request.POST,request.FILES,instance=profile)
         if form.is_valid():
             form.save()
+            message.success(request,"Profile details updated")
+        else:
+            message.error(request,"Error changing profile details")
         return redirect('home')
     else:
         form = ProfileForm(instance=profile)
     return render(request,'profile_settings.html',{'form':form,'user':user})
-
+@login_required
 def assigned_tasks(request):
     assigned_tasks = Task.objects.filter(assigned_to=request.user)
     return render(request,'assigned_tasks.html',{'assigned_tasks':assigned_tasks})
