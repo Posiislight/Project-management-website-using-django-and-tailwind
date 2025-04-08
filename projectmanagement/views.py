@@ -182,9 +182,9 @@ def profile(request,user_id):
         form = ProfileForm(request.POST,request.FILES,instance=profile)
         if form.is_valid():
             form.save()
-            message.success(request,"Profile details updated")
+            messages.success(request,"Profile details updated")
         else:
-            message.error(request,"Error changing profile details")
+            messages.error(request,"Error changing profile details")
         return redirect('home')
     else:
         form = ProfileForm(instance=profile)
