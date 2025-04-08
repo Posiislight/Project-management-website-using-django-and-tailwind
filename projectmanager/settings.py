@@ -85,7 +85,7 @@ WSGI_APPLICATION = 'projectmanager.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL', 'mysql://root:password@127.0.0.1:3306/project_manager')
+        default='mysql://root:YKtGxJTdEZjpQfvEcMWCdfXuKtCFkQqu@interchange.proxy.rlwy.net:37885/railway'
     )
 }
 
