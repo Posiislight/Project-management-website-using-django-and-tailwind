@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-j#cvv+c^x1%q-q*y)16ea4b)4y-zj*$&gww#tx%-os)gc=ul4@'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost','invigorating-playfulness-projectmanagementprod.up.railway.app']
 
@@ -143,3 +143,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 CSRF_TRUSTED_ORIGINS = [
     'https://invigorating-playfulness-projectmanagementprod.up.railway.app',
 ]
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+)
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Session storage backend
+SESSION_COOKIE_AGE = 3600  # Time before a session expires (in seconds)
+SESSION_COOKIE_SECURE = True  # Ensures the session cookie is sent over HTTPS only
+CSRF_COOKIE_SECURE = True     # Same for CSRF token cookie
+SECURE_SSL_REDIRECT = True  # Ensures all requests are redirected to HTTPS
