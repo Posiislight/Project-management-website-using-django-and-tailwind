@@ -147,7 +147,9 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Session storage backend
-SESSION_COOKIE_AGE = 3600  # Time before a session expires (in seconds)
+ # Time before a session expires (in seconds)
+ SESSION_COOKIE_AGE = 3600
+SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True  # Ensures the session cookie is sent over HTTPS only
 CSRF_COOKIE_SECURE = True     # Same for CSRF token cookie
-SECURE_SSL_REDIRECT = True  # Ensures all requests are redirected to HTTPS
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')# Ensures all requests are redirected to HTTPS
