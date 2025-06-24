@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-j#cvv+c^x1%q-q*y)16ea4b)4y-zj*$&gww#tx%-os)gc=ul4@'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost','invigorating-playfulness-projectmanagementprod.up.railway.app']
 
@@ -85,12 +85,7 @@ WSGI_APPLICATION = 'projectmanager.wsgi.application'
 
 DATABASES = {
     'default': {
-    'ENGINE': 'django.db.backends.mysql',
-    'NAME': 'project_manager',
-    'USER': 'root',
-    'PASSWORD':'password',
-    'HOST': 'localhost',
-    'PORT': '3306',
+    
     }
 }
 
@@ -153,8 +148,8 @@ AUTHENTICATION_BACKENDS = (
 )
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Session storage backend
  # Time before a session expires (in seconds)
-#SESSION_COOKIE_AGE = 3600
-#SECURE_SSL_REDIRECT = True
-#SESSION_COOKIE_SECURE = True  # Ensures the session cookie is sent over HTTPS only
-#CSRF_COOKIE_SECURE = True     # Same for CSRF token cookie
-#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')# Ensures all requests are redirected to HTTPS
+SESSION_COOKIE_AGE = 3600
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True  # Ensures the session cookie is sent over HTTPS only
+CSRF_COOKIE_SECURE = True     # Same for CSRF token cookie
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')# Ensures all requests are redirected to HTTPS
