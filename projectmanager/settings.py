@@ -85,9 +85,15 @@ WSGI_APPLICATION = 'projectmanager.wsgi.application'
 
 DATABASES = {
     'default': {
-    'mysql://root:uVzJkmzhzdIbBAyQcwinjHZPRAScPmxX@caboose.proxy.rlwy.net:25920/railway'
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'railway',
+        'USER': 'root',
+        'PASSWORD': 'uVzJkmzhzdIbBAyQcwinjHZPRAScPmxX',
+        'HOST': 'caboose.proxy.rlwy.net',
+        'PORT': '25920',
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
