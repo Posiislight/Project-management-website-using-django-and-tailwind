@@ -85,7 +85,7 @@ WSGI_APPLICATION = 'projectmanager.wsgi.application'
 
 DATABASES = {
     'default': {
-    
+    'mysql://root:uVzJkmzhzdIbBAyQcwinjHZPRAScPmxX@caboose.proxy.rlwy.net:25920/railway'
     }
 }
 
