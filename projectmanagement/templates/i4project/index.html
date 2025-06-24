@@ -1,123 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 p-6 md:p-10">
-    <div class="flex justify-between">
-    <input type="checkbox" id="sidebarToggle" class="peer hidden">
-    <label for="sidebarToggle" class="justify-start p-3 bg-blue-600 text-white rounded-lg cursor-pointer hover:bg-blue-500 transition">
-        Open Sidebar
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- Top Bar -->
+  <header class="flex justify-between items-center bg-white px-6 py-4 shadow-md">
+    <label for="sidebarToggle" class="bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-blue-500 transition">
+      ☰ Menu
     </label>
-    <div class="flex justify-end">
-    <a href="{% url 'profile' user_id=user.id %}" >
+
+    <div class="flex items-center space-x-4">
+      <a href="{% url 'profile' user_id=user.id %}">
         {% if user.profile.profile_image %}
-        <img src="{{ user.profile.profile_image.url }}" 
-        alt="" class="w-12 h-12 rounded-full">
+          <img src="{{ user.profile.profile_image.url }}" alt="Profile" class="w-10 h-10 rounded-full object-cover">
         {% else %}
-        <img src="/static/images/default-profile.png" alt="Default Profile" class="w-12 h-12 rounded-full">
+          <img src="/static/images/default-profile.png" alt="Default Profile" class="w-10 h-10 rounded-full object-cover">
         {% endif %}
-    </a>
+      </a>
     </div>
-    {% if messages %}
+  </header>
+
+  <!-- Sidebar -->
+  <input type="checkbox" id="sidebarToggle" class="peer hidden">
+  <aside class="fixed top-0 left-0 h-full w-64 bg-gray-900 text-white p-6 transform -translate-x-full peer-checked:translate-x-0 transition-transform z-40">
+    <h2 class="text-2xl font-bold mb-6">Menu</h2>
+    <nav class="space-y-4">
+      <a href="{% url 'home' %}" class="block hover:text-blue-400 transition">Home</a>
+      <a href="{% url 'assigned_tasks' %}" class="block hover:text-blue-400 transition">Assigned Tasks</a>
+      <a href="{% url 'logout' %}" class="block hover:text-blue-400 transition">Logout</a>
+    </nav>
+    <label for="sidebarToggle" class="mt-10 inline-block bg-red-500 px-4 py-2 rounded-lg text-white cursor-pointer hover:bg-red-600 transition">
+      Close Sidebar
+    </label>
+  </aside>
+
+  <!-- Notifications -->
+  {% if messages %}
+  <div class="container mx-auto mt-6 px-4">
     <div class="space-y-4">
-        {% for message in messages %}
-            <div 
-                class="
-                    px-4 py-3 rounded 
-                    {% if message.tags == 'debug' %}
-                        bg-gray-100 text-gray-800
-                    {% elif message.tags == 'info' %}
-                        bg-blue-100 text-blue-800
-                    {% elif message.tags == 'success' %}
-                        bg-green-100 text-green-800
-                    {% elif message.tags == 'warning' %}
-                        bg-yellow-100 text-yellow-800
-                    {% elif message.tags == 'error' %}
-                        bg-red-100 text-red-800
-                    {% else %}
-                        bg-gray-100 text-gray-800
-                    {% endif %}
-                "
-            >
-                {{ message }}
-            </div>
-        {% endfor %}
+      {% for message in messages %}
+      <div class="
+        px-4 py-3 rounded shadow
+        {% if message.tags == 'debug' %}
+          bg-gray-100 text-gray-800
+        {% elif message.tags == 'info' %}
+          bg-blue-100 text-blue-800
+        {% elif message.tags == 'success' %}
+          bg-green-100 text-green-800
+        {% elif message.tags == 'warning' %}
+          bg-yellow-100 text-yellow-800
+        {% elif message.tags == 'error' %}
+          bg-red-100 text-red-800
+        {% else %}
+          bg-gray-100 text-gray-800
+        {% endif %}
+      ">
+        {{ message }}
+      </div>
+      {% endfor %}
     </div>
-{% endif %}
+  </div>
+  {% endif %}
 
-    <div class="fixed top-0 left-0 h-full w-64 bg-gray-900 text-white p-6 -translate-x-full peer-checked:translate-x-0 transition-transform">
-        <h2 class="text-2xl font-semibold">Sidebar</h2>
-        <ul class="mt-4 space-y-3">
-            <li><a href="{% url 'home' %}" class="hover:text-blue-400 transition">Home</a></li>
-            <li><a href="{% url 'assigned_tasks' %}" class="hover:text-blue-400 transition">Assigned Tasks</a></li>
-            <li><a href="{% url 'logout' %}" class="hover:text-blue-400 transition">Logout</a></li>
-
-        </ul>
-        <label for="sidebarToggle" class="mt-6 block p-2 bg-red-500 text-white rounded-lg cursor-pointer hover:bg-red-600 transition">
-            Close Sidebar
-        </label>
-    </div>
-    </div>
+  <!-- Main Content -->
+  <main class="container mx-auto mt-8 px-4">
     {% block content %}
-    <div class="text-2xl font-bold text-center mt-6">Welcome, {{ user.username }}!</div>
+    <h1 class="text-3xl font-bold text-center mb-6">Welcome, {{ user.username }}!</h1>
 
-    
-    <div class="container mx-auto mt-6 px-4">
-        <div class="bg-white p-6 rounded-xl shadow-lg max-w-2xl mx-auto hover:shadow-xl transition">
-            <h2 class="text-2xl font-semibold text-gray-800 text-center">Project Overview</h2>
-            <div class="flex flex-col md:flex-row justify-center items-center md:space-x-4 mt-4">
-                <div class="text-lg font-medium text-gray-600">Total Projects:</div> 
-                <div class="text-lg font-bold text-blue-600">{{ total_projects }}</div>
-            </div>
-            <div class="text-lg font-medium text-gray-600 text-center mt-2">
-                Total Completed Tasks Across All Projects: <span class="font-bold">{{ total_completed_tasks }}</span>
-            </div>
-        </div>
-    </div>
+    <section class="bg-white p-6 rounded-xl shadow-lg max-w-2xl mx-auto hover:shadow-xl transition">
+      <h2 class="text-2xl font-semibold text-gray-800 text-center mb-4">Project Overview</h2>
+      <div class="flex justify-center items-center space-x-2 text-lg text-gray-700">
+        <span class="font-medium">Total Projects:</span>
+        <span class="font-bold text-blue-600">{{ total_projects }}</span>
+      </div>
+      <p class="text-lg text-gray-700 text-center mt-2">
+        Total Completed Tasks: <span class="font-bold">{{ total_completed_tasks }}</span>
+      </p>
+    </section>
 
-    <div class="mt-10 container mx-auto px-4">
-        <div class="flex flex-col md:flex-row justify-between items-center">
-            <h2 class="text-2xl font-bold">Projects</h2>
-            <a href="{% url 'add_project' %}" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-500 transition shadow-md">
-                + ADD PROJECT
+    <section class="mt-10">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold">Projects</h2>
+        <a href="{% url 'add_project' %}" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-500 transition shadow">
+          + Add Project
+        </a>
+      </div>
+
+      <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for project in project_data %}
+        <li class="bg-white p-6 rounded-xl shadow hover:shadow-xl transition">
+          <h3 class="text-xl font-semibold text-gray-800">{{ project.name }}</h3>
+          <p class="text-gray-600 mt-1">ID: {{ project.id }}</p>
+          <p class="text-gray-600">Progress: <span class="font-semibold">{{ project.progress }}%</span></p>
+          <p class="text-gray-600">Completed Tasks: <span class="font-semibold">{{ project.completed_tasks }}</span></p>
+          <p class="text-gray-600 mb-4">Total Tasks: <span class="font-semibold">{{ project.total_tasks }}</span></p>
+
+          <div class="flex flex-wrap gap-2">
+            <a href="{% url 'edit_project' project_id=project.id %}" class="flex-1 bg-green-500 text-white py-2 px-4 rounded-lg text-center hover:bg-green-600 transition">
+              Edit
             </a>
-        </div>
-
-        <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-            {% for project in project_data %}
-                <li class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition">
-                    <div class="mb-4">
-                        <h3 class="text-xl font-semibold text-gray-800">{{ project.name }}</h3>
-                        <p class="text-gray-600 font-medium">Project ID: {{ project.id }}</p>
-                        <p class="text-gray-600">Progress: <span class="font-semibold">{{ project.progress }}%</span></p>
-                        <p class="text-gray-600">Completed Tasks: <span class="font-semibold">{{ project.completed_tasks }}</span></p>
-                        <p class="text-gray-600">Total Tasks: <span class="font-semibold">{{ project.total_tasks }}</span></p>
-                    </div>
-
-                    <div class="flex flex-wrap justify-between gap-2">
-                        <a href="{% url 'edit_project' project_id=project.id %}" 
-                           class="bg-green-500 text-white py-2 px-4 rounded-lg text-center shadow-md hover:bg-green-600 transition w-full sm:w-auto">
-                            Edit
-                        </a>
-
-                        <a href="{% url 'delete_project' project_id=project.id %}" 
-                           class="bg-red-500 text-white py-2 px-4 rounded-lg text-center shadow-md hover:bg-red-600 transition w-full sm:w-auto">
-                            Delete
-                        </a>
-
-                        <a href="{% url 'project_details' project_id=project.id %}" 
-                           class="bg-gray-500 text-white py-2 px-4 rounded-lg text-center shadow-md hover:bg-gray-600 transition w-full sm:w-auto">
-                            Details
-                        </a>
-                    </div>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
+            <a href="{% url 'delete_project' project_id=project.id %}" class="flex-1 bg-red-500 text-white py-2 px-4 rounded-lg text-center hover:bg-red-600 transition">
+              Delete
+            </a>
+            <a href="{% url 'project_details' project_id=project.id %}" class="flex-1 bg-gray-500 text-white py-2 px-4 rounded-lg text-center hover:bg-gray-600 transition">
+              Details
+            </a>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </section>
     {% endblock %}
+  </main>
 </body>
 </html>

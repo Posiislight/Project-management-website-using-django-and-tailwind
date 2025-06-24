@@ -71,5 +71,5 @@ def update_task_counts_delete(sender,instance,**kwargs):
 @receiver(post_save,sender=User)
 def createprofile(sender,instance,created,**kwargs):
     if created:
-        Profile.object.create(owner=instance)
+        Profile.objects.create(owner=instance)
 
