@@ -13,8 +13,6 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os 
 import dj_database_url
-import pymysql
-pymysql.install_as_MySQLdb()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -85,7 +83,7 @@ WSGI_APPLICATION = 'projectmanager.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default="postgresql://project_manager_db_czmw_user:kNdOfhp4nAOhzD8PaZL17f0nQkcdMvP7@dpg-d2bkob2dbo4c73aujarg-a.oregon-postgres.render.com/project_manager_db_czmaw"
+        default="postgresql://project_manager_db_czmw_user:kNdOfhp4nAOhzD8PaZL17f0nQkcdMvP7@dpg-d2bkob2dbo4c73aujarg-a.oregon-postgres.render.com/project_manager_db_czmw"
     )
 }
 
