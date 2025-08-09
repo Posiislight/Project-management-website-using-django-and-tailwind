@@ -84,14 +84,9 @@ WSGI_APPLICATION = 'projectmanager.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-    'ENGINE': 'django.db.backends.mysql',
-    'NAME': 'project_manager',
-    'USER': 'root',
-    'PASSWORD':'password',
-    'HOST': 'localhost',
-    'PORT': '3306',
-    }
+    'default': dj_database_url.config(
+        default="postgresql://project_manager_db_czmw_user:kNdOfhp4nAOhzD8PaZL17f0nQkcdMvP7@dpg-d2bkob2dbo4c73aujarg-a.oregon-postgres.render.com/project_manager_db_czmaw"
+    )
 }
 
 # Password validation
