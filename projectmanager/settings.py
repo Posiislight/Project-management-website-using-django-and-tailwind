@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'projectmanager.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default="postgresql://project_manager_db_czmw_user:kNdOfhp4nAOhzD8PaZL17f0nQkcdMvP7@dpg-d2bkob2dbo4c73aujarg-a.oregon-postgres.render.com/project_manager_db_czmw"
+        default="postgresql://postgres.trmpuxrbsjjvyueffyhi:Adeleke0%2123@aws-0-eu-north-1.pooler.supabase.com:5432/postgres"
     )
 }
 
