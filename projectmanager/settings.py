@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-j#cvv+c^x1%q-q*y)16ea4b)4y-zj*$&gww#tx%-os)gc=ul4@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost','invigorating-playfulness-projectmanagementprod.up.railway.app']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost','https://project-management-website-using-django.onrender.com']
 
 
 # Application definition
@@ -142,7 +142,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://invigorating-playfulness-projectmanagementprod.up.railway.app',
+    'https://project-management-website-using-django.onrender.com',
 ]
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
