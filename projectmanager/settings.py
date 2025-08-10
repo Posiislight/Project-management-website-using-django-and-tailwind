@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-j#cvv+c^x1%q-q*y)16ea4b)4y-zj*$&gww#tx%-os)gc=ul4@'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost','invigorating-playfulness-projectmanagementprod.up.railway.app']
 
@@ -83,7 +83,10 @@ WSGI_APPLICATION = 'projectmanager.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default="postgresql://postgres.trmpuxrbsjjvyueffyhi:Adeleke0%2123@aws-0-eu-north-1.pooler.supabase.com:5432/postgres"
+        default="postgresql://postgres.trmpuxrbsjjvyueffyhi:Adeleke0%2123@aws-0-eu-north-1.pooler.supabase.com:5432/postgres",
+        conn_max_age=600,
+        conn_health_checks=True,
+        ssl_require=True
     )
 }
 

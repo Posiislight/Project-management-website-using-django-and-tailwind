@@ -1,35 +1,135 @@
-    {% extends "index.html "%}
-    {% block title%}Project details {% endblock %}
-    {% block content %}
-    <div class="flex justify-end mb-4">
-        <button class="bg-blue-600 text-white rounded-xl h-10 px-4 py-2 hover:bg-blue-500 transition"
-        onclick="window.location.href='{% url 'add_task' project_id=project.id %}'">
-        + ADD TASKS TO PROJECT
-    </button>
-    
-    </div>
-    <div class="flex">
-        <h1 class=" font-bold mb-3 bg-blue-200 p-3 rounded-lg mr-4">{{ project.project_name }}</h1>
-        <h2 class="font-bold mb-3 bg-gray-500 p-3 rounded-lg">Project id : {{ project.id }} </h2>
-    </div>
-    <ul class="grid grid-cols-3 gap-2">
-        
-        {% for task in task_data %}
-        <li class="p-5 bg-white shadow-lg rounded-xl hover:shadow-xl transition">
-            <div class="font-semibold flex">Task-name: <div class="ml-4 text-gray-600">{{ task.task_name }}</div> </div>
-            
-            <div class="font-semibold flex">Task-description: <div class="text-gray-600 ml-4">{{ task.task_description }}</div></div>
-            <div class="font-semibold flex">Due date: <div class="text-gray-600 ml-4">{{ task.due_date }}</div></div>
-            <div class="font-semibold flex">Past due date : <div class="text-gray-600 ml-4">{{ task.past_due_date }}</div></div>
-            <div class="font-semibold flex">Assigned to : <div class="text-gray-600 ml-4">{{ task.assigned_to }}</div></div>
-            <div class="flex space-x-4">
-            <button class="bg-blue-500 p-1.5 rounded-xl mt-2 shadow-xl hover:bg-blue-300" onclick="window.location.href='{% url 'edit_task' task.id project.id %}'">EDIT TASK</button>
-            <button class="bg-red-500 p-1.5 rounded-xl mt-2 shadow-xl hover:bg-red-300"  onclick="window.location.href='{% url 'delete_task' task.id project.id %}'">DELETE TASK</button>
+{% extends "index.html" %}
+{% block title %}Project Details - TaskFlow{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <!-- Project Header -->
+    <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6 mb-8 border border-white/20">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ project.project_name }}</h1>
+                <div class="flex items-center space-x-4 text-gray-600">
+                    <span class="flex items-center">
+                        <i class="fas fa-hashtag mr-1"></i>
+                        Project #{{ project.id }}
+                    </span>
+                    <span class="flex items-center">
+                        <i class="fas fa-calendar mr-1"></i>
+                        Created by {{ project.owner.username }}
+                    </span>
+                </div>
             </div>
-        </li>
-        {% endfor %}
-        
-    </ul>
-        
-        
-    {% endblock%}
+            <div class="mt-4 md:mt-0">
+                <a href="{% url 'add_task' project_id=project.id %}" 
+                   class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl font-medium">
+                   <i class="fas fa-plus mr-2"></i>Add Task
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tasks Section -->
+    <div class="mb-8">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-900">Project Tasks</h2>
+            <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm font-medium">
+                {{ task_data|length }} tasks
+            </span>
+        </div>
+
+        {% if task_data %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for task in task_data %}
+                <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-white/20 overflow-hidden">
+                    <div class="p-6">
+                        <!-- Task Header -->
+                        <div class="flex items-start justify-between mb-4">
+                            <h3 class="text-lg font-bold text-gray-900 truncate flex-1 mr-3">{{ task.task_name }}</h3>
+                            <div class="flex space-x-2">
+                                <a href="{% url 'edit_task' task_id=task.id %}" 
+                                   class="text-blue-600 hover:text-blue-700 transition-colors">
+                                   <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="{% url 'delete_task' task_id=task.id %}" 
+                                   class="text-red-600 hover:text-red-700 transition-colors">
+                                   <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Task Description -->
+                        {% if task.task_description %}
+                        <div class="mb-4">
+                            <p class="text-gray-600 text-sm leading-relaxed">{{ task.task_description }}</p>
+                        </div>
+                        {% endif %}
+
+                        <!-- Task Details -->
+                        <div class="space-y-3 mb-6">
+                            {% if task.due_date %}
+                            <div class="flex items-center text-sm">
+                                <i class="fas fa-calendar-alt text-gray-400 mr-3 w-4"></i>
+                                <span class="text-gray-700">Due: {{ task.due_date|date:"M d, Y" }}</span>
+                            </div>
+                            {% endif %}
+
+                            {% if task.assigned_to %}
+                            <div class="flex items-center text-sm">
+                                <i class="fas fa-user text-gray-400 mr-3 w-4"></i>
+                                <span class="text-gray-700">Assigned to: {{ task.assigned_to }}</span>
+                            </div>
+                            {% endif %}
+
+                            <!-- Past Due Status -->
+                            {% if task.past_due_date == 'Yes' %}
+                            <div class="flex items-center text-sm">
+                                <i class="fas fa-exclamation-triangle text-red-500 mr-3 w-4"></i>
+                                <span class="text-red-600 font-medium">Past Due</span>
+                            </div>
+                            {% elif task.past_due_date == 'No' %}
+                            <div class="flex items-center text-sm">
+                                <i class="fas fa-check-circle text-green-500 mr-3 w-4"></i>
+                                <span class="text-green-600 font-medium">On Time</span>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex space-x-2">
+                            <a href="{% url 'edit_task' task_id=task.id %}" 
+                               class="flex-1 bg-blue-500 text-white py-2 px-3 rounded-lg text-center hover:bg-blue-600 transition-all duration-300 text-sm font-medium">
+                               <i class="fas fa-edit mr-1"></i>Edit
+                            </a>
+                            <a href="{% url 'delete_task' task_id=task.id %}" 
+                               class="flex-1 bg-red-500 text-white py-2 px-3 rounded-lg text-center hover:bg-red-600 transition-all duration-300 text-sm font-medium">
+                               <i class="fas fa-trash mr-1"></i>Delete
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-12">
+                <div class="w-24 h-24 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-tasks text-white text-3xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-4">No Tasks Yet</h3>
+                <p class="text-gray-600 mb-6">Get started by adding your first task to this project</p>
+                <a href="{% url 'add_task' project_id=project.id %}" 
+                   class="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 px-8 rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                   <i class="fas fa-plus mr-2"></i>Add Your First Task
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Back to Dashboard -->
+    <div class="text-center">
+        <a href="{% url 'home' %}" 
+           class="inline-flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors font-medium">
+           <i class="fas fa-arrow-left"></i>
+           <span>Back to Dashboard</span>
+        </a>
+    </div>
+</div>
+{% endblock %}

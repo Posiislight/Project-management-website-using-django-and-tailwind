@@ -3,39 +3,77 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard</title>
+  <title>Dashboard - TaskFlow</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 min-h-screen">
+<body class="bg-gradient-to-br from-gray-50 to-blue-50 min-h-screen">
 
-  <!-- Top Bar -->
-  <header class="flex justify-between items-center bg-white px-6 py-4 shadow-md">
-    <label for="sidebarToggle" class="bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-blue-500 transition">
-      ☰ Menu
-    </label>
+  <!-- Top Navigation -->
+  <header class="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center space-x-4">
+          <label for="sidebarToggle" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-xl cursor-pointer hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
+            <i class="fas fa-bars mr-2"></i>Menu
+          </label>
+          
+          <div class="flex items-center space-x-2">
+            <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+              <i class="fas fa-tasks text-white text-sm"></i>
+            </div>
+            <span class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              TaskFlow
+            </span>
+          </div>
+        </div>
 
-    <div class="flex items-center space-x-4">
-      <a href="{% url 'profile' user_id=user.id %}">
-        {% if user.profile.profile_image %}
-          <img src="{{ user.profile.profile_image.url }}" alt="Profile" class="w-10 h-10 rounded-full object-cover">
-        {% else %}
-          <img src="/static/images/default-profile.png" alt="Default Profile" class="w-10 h-10 rounded-full object-cover">
-        {% endif %}
-      </a>
+        <div class="flex items-center space-x-4">
+          <div class="relative">
+            <a href="{% url 'profile' user_id=user.id %}" class="flex items-center space-x-2 hover:bg-gray-100 p-2 rounded-lg transition-colors">
+              {% if user.profile.profile_image %}
+                <img src="{{ user.profile.profile_image.url }}" alt="Profile" class="w-10 h-10 rounded-full object-cover border-2 border-gray-200">
+              {% else %}
+                <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                  <i class="fas fa-user text-white"></i>
+                </div>
+              {% endif %}
+              <span class="text-gray-700 font-medium">{{ user.username }}</span>
+              <i class="fas fa-chevron-down text-gray-400"></i>
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   </header>
 
   <!-- Sidebar -->
   <input type="checkbox" id="sidebarToggle" class="peer hidden">
-  <aside class="fixed top-0 left-0 h-full w-64 bg-gray-900 text-white p-6 transform -translate-x-full peer-checked:translate-x-0 transition-transform z-40">
-    <h2 class="text-2xl font-bold mb-6">Menu</h2>
-    <nav class="space-y-4">
-      <a href="{% url 'home' %}" class="block hover:text-blue-400 transition">Home</a>
-      <a href="{% url 'assigned_tasks' %}" class="block hover:text-blue-400 transition">Assigned Tasks</a>
-      <a href="{% url 'logout' %}" class="block hover:text-blue-400 transition">Logout</a>
+  <aside class="fixed top-0 left-0 h-full w-64 bg-gradient-to-b from-gray-900 to-gray-800 text-white p-6 transform -translate-x-full peer-checked:translate-x-0 transition-transform z-40 shadow-2xl">
+    <div class="flex items-center space-x-2 mb-8">
+      <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+        <i class="fas fa-tasks text-white text-sm"></i>
+      </div>
+      <span class="text-xl font-bold">TaskFlow</span>
+    </div>
+    
+    <nav class="space-y-2">
+      <a href="{% url 'home' %}" class="flex items-center space-x-3 px-4 py-3 rounded-xl hover:bg-white/10 transition-all duration-300 group">
+        <i class="fas fa-home text-blue-400 group-hover:text-white"></i>
+        <span class="font-medium">Dashboard</span>
+      </a>
+      <a href="{% url 'assigned_tasks' %}" class="flex items-center space-x-3 px-4 py-3 rounded-xl hover:bg-white/10 transition-all duration-300 group">
+        <i class="fas fa-clipboard-list text-green-400 group-hover:text-white"></i>
+        <span class="font-medium">Assigned Tasks</span>
+      </a>
+      <a href="{% url 'logout' %}" class="flex items-center space-x-3 px-4 py-3 rounded-xl hover:bg-red-500 transition-all duration-300 group mt-8">
+        <i class="fas fa-sign-out-alt text-red-400 group-hover:text-white"></i>
+        <span class="font-medium">Logout</span>
+      </a>
     </nav>
-    <label for="sidebarToggle" class="mt-10 inline-block bg-red-500 px-4 py-2 rounded-lg text-white cursor-pointer hover:bg-red-600 transition">
-      Close Sidebar
+    
+    <label for="sidebarToggle" class="mt-10 inline-block bg-red-500 px-4 py-2 rounded-xl text-white cursor-pointer hover:bg-red-600 transition-all duration-300 transform hover:scale-105">
+      <i class="fas fa-times mr-2"></i>Close
     </label>
   </aside>
 
@@ -45,22 +83,25 @@
     <div class="space-y-4">
       {% for message in messages %}
       <div class="
-        px-4 py-3 rounded shadow
+        px-6 py-4 rounded-xl shadow-lg border-l-4
         {% if message.tags == 'debug' %}
-          bg-gray-100 text-gray-800
+          bg-gray-100 text-gray-800 border-gray-400
         {% elif message.tags == 'info' %}
-          bg-blue-100 text-blue-800
+          bg-blue-50 text-blue-800 border-blue-400
         {% elif message.tags == 'success' %}
-          bg-green-100 text-green-800
+          bg-green-50 text-green-800 border-green-400
         {% elif message.tags == 'warning' %}
-          bg-yellow-100 text-yellow-800
+          bg-yellow-50 text-yellow-800 border-yellow-400
         {% elif message.tags == 'error' %}
-          bg-red-100 text-red-800
+          bg-red-50 text-red-800 border-red-400
         {% else %}
-          bg-gray-100 text-gray-800
+          bg-gray-100 text-gray-800 border-gray-400
         {% endif %}
       ">
-        {{ message }}
+        <div class="flex items-center">
+          <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' %}fa-exclamation-circle{% elif message.tags == 'warning' %}fa-exclamation-triangle{% else %}fa-info-circle{% endif %} mr-3 text-lg"></i>
+          <span class="font-medium">{{ message }}</span>
+        </div>
       </div>
       {% endfor %}
     </div>
@@ -68,52 +109,133 @@
   {% endif %}
 
   <!-- Main Content -->
-  <main class="container mx-auto mt-8 px-4">
+  <main class="container mx-auto mt-8 px-4 pb-8">
     {% block content %}
-    <h1 class="text-3xl font-bold text-center mb-6">Welcome, {{ user.username }}!</h1>
-
-    <section class="bg-white p-6 rounded-xl shadow-lg max-w-2xl mx-auto hover:shadow-xl transition">
-      <h2 class="text-2xl font-semibold text-gray-800 text-center mb-4">Project Overview</h2>
-      <div class="flex justify-center items-center space-x-2 text-lg text-gray-700">
-        <span class="font-medium">Total Projects:</span>
-        <span class="font-bold text-blue-600">{{ total_projects }}</span>
-      </div>
-      <p class="text-lg text-gray-700 text-center mt-2">
-        Total Completed Tasks: <span class="font-bold">{{ total_completed_tasks }}</span>
+    <!-- Welcome Section -->
+    <div class="text-center mb-12">
+      <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+        Welcome back, <span class="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">{{ user.username }}</span>!
+      </h1>
+      <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+        Here's an overview of your projects and progress
       </p>
+    </div>
+
+    <!-- Stats Overview -->
+    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+      <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-white/20">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-600 text-sm font-medium">Total Projects</p>
+            <p class="text-3xl font-bold text-gray-900">{{ total_projects }}</p>
+          </div>
+          <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+            <i class="fas fa-project-diagram text-white text-xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-white/20">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-600 text-sm font-medium">Completed Tasks</p>
+            <p class="text-3xl font-bold text-gray-900">{{ total_completed_tasks }}</p>
+          </div>
+          <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-xl flex items-center justify-center">
+            <i class="fas fa-check-circle text-white text-xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-white/20">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-gray-600 text-sm font-medium">Active Projects</p>
+            <p class="text-3xl font-bold text-gray-900">{{ project_data|length }}</p>
+          </div>
+          <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl flex items-center justify-center">
+            <i class="fas fa-rocket text-white text-xl"></i>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <section class="mt-10">
-      <div class="flex justify-between items-center mb-4">
-        <h2 class="text-2xl font-bold">Projects</h2>
-        <a href="{% url 'add_project' %}" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-500 transition shadow">
-          + Add Project
+    <!-- Projects Section -->
+    <section class="mb-12">
+      <div class="flex justify-between items-center mb-8">
+        <div>
+          <h2 class="text-3xl font-bold text-gray-900">Your Projects</h2>
+          <p class="text-gray-600 mt-2">Manage and track your project progress</p>
+        </div>
+        <a href="{% url 'add_project' %}" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 px-6 rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+          <i class="fas fa-plus mr-2"></i>New Project
         </a>
       </div>
 
-      <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {% for project in project_data %}
-        <li class="bg-white p-6 rounded-xl shadow hover:shadow-xl transition">
-          <h3 class="text-xl font-semibold text-gray-800">{{ project.name }}</h3>
-          <p class="text-gray-600 mt-1">ID: {{ project.id }}</p>
-          <p class="text-gray-600">Progress: <span class="font-semibold">{{ project.progress }}%</span></p>
-          <p class="text-gray-600">Completed Tasks: <span class="font-semibold">{{ project.completed_tasks }}</span></p>
-          <p class="text-gray-600 mb-4">Total Tasks: <span class="font-semibold">{{ project.total_tasks }}</span></p>
+      {% if project_data %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {% for project in project_data %}
+          <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-white/20 overflow-hidden">
+            <div class="p-6">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-bold text-gray-900 truncate">{{ project.name }}</h3>
+                <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">#{{ project.id }}</span>
+              </div>
+              
+              <!-- Progress Bar -->
+              <div class="mb-4">
+                <div class="flex justify-between items-center mb-2">
+                  <span class="text-sm font-medium text-gray-700">Progress</span>
+                  <span class="text-sm font-bold text-blue-600">{{ project.progress }}%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div class="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full transition-all duration-500" style="width: {{ project.progress }}%"></div>
+                </div>
+              </div>
 
-          <div class="flex flex-wrap gap-2">
-            <a href="{% url 'edit_project' project_id=project.id %}" class="flex-1 bg-green-500 text-white py-2 px-4 rounded-lg text-center hover:bg-green-600 transition">
-              Edit
-            </a>
-            <a href="{% url 'delete_project' project_id=project.id %}" class="flex-1 bg-red-500 text-white py-2 px-4 rounded-lg text-center hover:bg-red-600 transition">
-              Delete
-            </a>
-            <a href="{% url 'project_details' project_id=project.id %}" class="flex-1 bg-gray-500 text-white py-2 px-4 rounded-lg text-center hover:bg-gray-600 transition">
-              Details
-            </a>
+              <!-- Stats -->
+              <div class="grid grid-cols-2 gap-4 mb-6">
+                <div class="text-center">
+                  <p class="text-2xl font-bold text-green-600">{{ project.completed_tasks }}</p>
+                  <p class="text-xs text-gray-500">Completed</p>
+                </div>
+                <div class="text-center">
+                  <p class="text-2xl font-bold text-gray-900">{{ project.total_tasks }}</p>
+                  <p class="text-xs text-gray-500">Total Tasks</p>
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="grid grid-cols-3 gap-2">
+                <a href="{% url 'edit_project' project_id=project.id %}" 
+                   class="bg-blue-500 text-white py-2 px-3 rounded-lg text-center hover:bg-blue-600 transition-all duration-300 text-sm font-medium">
+                   <i class="fas fa-edit mr-1"></i>Edit
+                </a>
+                <a href="{% url 'project_details' project_id=project.id %}" 
+                   class="bg-gray-500 text-white py-2 px-3 rounded-lg text-center hover:bg-gray-600 transition-all duration-300 text-sm font-medium">
+                   <i class="fas fa-eye mr-1"></i>View
+                </a>
+                <a href="{% url 'delete_project' project_id=project.id %}" 
+                   class="bg-red-500 text-white py-2 px-3 rounded-lg text-center hover:bg-red-600 transition-all duration-300 text-sm font-medium">
+                   <i class="fas fa-trash mr-1"></i>Delete
+                </a>
+              </div>
+            </div>
           </div>
-        </li>
-        {% endfor %}
-      </ul>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="text-center py-12">
+          <div class="w-24 h-24 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+            <i class="fas fa-folder-plus text-white text-3xl"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">No Projects Yet</h3>
+          <p class="text-gray-600 mb-6">Get started by creating your first project</p>
+          <a href="{% url 'add_project' %}" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 px-8 rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
+            <i class="fas fa-plus mr-2"></i>Create Your First Project
+          </a>
+        </div>
+      {% endif %}
     </section>
     {% endblock %}
   </main>
