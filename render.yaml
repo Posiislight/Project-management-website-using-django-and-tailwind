@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: taskflow-project-management
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn projectmanager.wsgi:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: DJANGO_SETTINGS_MODULE
+        value: projectmanager.settings
